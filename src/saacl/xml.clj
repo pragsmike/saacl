@@ -88,10 +88,3 @@
 
 (defn element? [node] (instance? org.w3c.dom.Element node))
 
-(defn lazy-child-list
-  "http://stackoverflow.com/questions/5898215/converting-a-org-w3c-dom-nodelist-to-a-clojure-iseq"
-  [element]
-  (let [nodelist (.getChildNodes element)
-        len (.getLength nodelist)]
-    (for [i (range len)]
-      (.item nodelist i))))

@@ -1,14 +1,21 @@
-# saacl
+# saacl SOAP with Attachments (SAAJ) wrapper for Clojure
 
-A Clojure library designed to ... well, that part is up to you.
+Provides pretty-print and some idiomatic wrappers for Java's SOAP (SAAJ) package.
+
 
 ## Usage
 
-FIXME
+```
+(require 'saacl.xml)
+
+(def doc (xml/->doc "<top><middle/></top>")
+
+(xml/pprint doc)
+```
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2014 Mike Gallaher
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
