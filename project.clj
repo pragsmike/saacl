@@ -5,7 +5,8 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [com.github.kyleburton/clj-xpath "1.4.4"]
-  ]
+                 [xerces/xercesImpl "2.9.1"]
+                 ]
 
   :profiles
   {
