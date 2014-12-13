@@ -1,5 +1,6 @@
 (ns saacl.t-soap
-  (:import (javax.xml.soap SOAPMessage))
+  (:import (javax.xml.soap SOAPMessage)
+           (org.w3c.dom Node Document))
   (:require [saacl.soap :refer :all]
             [saacl.xml :as xml]
             [midje.sweet :refer :all]
@@ -35,6 +36,14 @@
 (fact "get-soap-headers"
       (get-soap-headers (->soap response)) => {"content-type" "text/plain"}
       )
+
+
+(fact "get-payload-from-soap"
+      (let [body (get-payload-from-soap (->soap response) "application/xml")]
+        body => #(instance? Node %)
+        body => #(instance? Document %)
+        (xml/->string body) => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<one/>\n"
+        ))
 
 (fact "build-soap-xml text/plain body"
       (let [soap (build-soap-xml {:content-type "text/plain"} "Text!")]

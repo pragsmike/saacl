@@ -2,6 +2,8 @@
 
 Provides pretty-print and some idiomatic wrappers for Java's SOAP (SAAJ) package.
 
+For more details about SOAP see http://www.soapuser.com/basics3.html
+
 
 ## Usage
 

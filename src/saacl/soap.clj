@@ -75,7 +75,7 @@
 
 
 
-(defn get-body-from-soap
+(defn get-payload-from-soap
   "Given a SOAPMessage that contains a ROAP-encoded request or response,
   and a a MIME content-type as a string, extract the payload object that was
   encoded in the SOAP body.  This will be one of
@@ -84,7 +84,7 @@
   "
   [soap content-type]
   (if (re-find #"application/xml" content-type)
-    (first (iterator-seq (.getChildElements (.getSOAPBody soap))))
+    (.extractContentAsDocument (.getSOAPBody soap))
     (.getTextContent (.getSOAPBody soap))
     )
   )
