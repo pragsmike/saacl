@@ -57,3 +57,15 @@
         soap => is-right-soap?
         (get-soap-headers soap) => {"content-type" "application/xml"}
         ))
+
+(fact "set-as-payload! xml"
+      (let [soap (build-soap {:content-type "application/xml" } "<one/>")]
+        (get-payload-from-soap soap "application/xml") => (partial instance? Document)
+        )
+      )
+
+(fact "set-as-payload! text"
+      (let [soap (build-soap {:content-type "text/plain" } "Hey!")]
+        (get-payload-from-soap soap "text/plain") => "Hey!"
+        )
+      )
