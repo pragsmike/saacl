@@ -45,6 +45,8 @@
     (->doc [it] (->doc (.getContent it)))
   Object
     (->doc [it] (binding [xp/*namespace-aware* true] (xp/xml->doc it)))
+  nil
+    (->doc [it] nil)
   )
 
 (extend-protocol PrettyPrint
