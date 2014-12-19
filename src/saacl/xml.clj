@@ -5,9 +5,9 @@
            (javax.xml.transform.dom DOMSource)
            (java.io StringWriter InputStream ByteArrayInputStream)
            (org.w3c.dom Document Node)
-           (javax.xml.soap SOAPMessage SOAPPart))
-  (:require [clojure.xml :as cxml]
-            [clj-xpath.core :as xp]
+           (javax.xml.soap SOAPMessage SOAPPart)
+           (java.net URL))
+  (:require [clj-xpath.core :as xp]
             [clojure.java.io :as io]))
 
 (defprotocol PrettyPrint
@@ -37,6 +37,9 @@
   InputStream
     (->source [it] (StreamSource. it))
     (->doc [it] (binding [xp/*namespace-aware* true] (xp/xml->doc it)))
+  URL
+    (->source [it] (->source (io/input-stream it)))
+    (->doc [it] (->doc (io/input-stream it)))
   SOAPMessage
     (->source [it] (->source (.getSOAPPart it)))
     (->doc [it] (->doc (.getSOAPPart it)))
