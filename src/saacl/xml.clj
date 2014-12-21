@@ -2,8 +2,8 @@
   (:import (javax.xml.transform.stream StreamResult StreamSource)
            (javax.xml.transform TransformerFactory Source)
            (org.apache.xml.serialize OutputFormat XMLSerializer)
-           (javax.xml.transform.dom DOMSource)
-           (java.io StringWriter InputStream ByteArrayInputStream)
+           (javax.xml.transform.dom DOMSource DOMResult)
+           (java.io InputStream ByteArrayInputStream)
            (org.w3c.dom Document Node)
            (javax.xml.soap SOAPMessage SOAPPart)
            (java.net URL))
@@ -23,6 +23,14 @@
 (extend-protocol XmlConvert
   Source
     (->source [it] it)
+    (->doc [it] (->doc (let [result (DOMResult.)]
+                         (-> (TransformerFactory/newInstance)
+                             (.newTransformer)
+                             (.transform it result)
+                             )
+                         result)))
+  DOMResult
+    (->doc [it] (->doc (.getNode it)))
   DOMSource
     (->doc [it] (->doc (.getNode it)))
 

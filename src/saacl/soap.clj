@@ -4,7 +4,8 @@
            (javax.xml.transform.dom DOMSource)
            (org.w3c.dom DOMException Node Document)
            (java.io InputStream)
-           (javax.xml.transform Source))
+           (javax.xml.transform Source)
+           (java.net URL))
   (:require [clojure.java.io :as io]
             [clj-xpath.core :as xp]
             [saacl.xml :as xml]))
@@ -43,7 +44,8 @@
     (->soap [in] (-> soap-factory
                      (.createMessage (mime-headers) in)
                      ))
-
+  URL
+    (->soap [in] (->soap (io/input-stream in)))
   Source
     (->soap [in] (-> soap-factory
                      (.createMessage)
