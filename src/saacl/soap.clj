@@ -78,6 +78,12 @@
                 ))
   )
 
+(defn get-header-elements [doc ns tagname]
+  (xp/dom-node-list->seq (.getElementsByTagNameNS (.getSOAPHeader doc) ns tagname)))
+
+(defn get-header-element [doc ns tagname]
+  (first (get-header-elements doc ns tagname)))
+
 (defn soap-name [soap s]
   (-> soap
       (.getSOAPPart)
@@ -175,5 +181,3 @@
     soap
     )
   )
-
-
