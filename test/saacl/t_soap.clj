@@ -7,14 +7,14 @@
             [clojure.java.io :as io])
   )
 
-(def response "<?xml version='1.0' encoding='UTF-8'?>
-<soap:Envelope xmlns:soap='http://www.w3.org/2003/05/soap-envelope' xmlns='urn:foo'>
+(def response (str "<?xml version='1.0' encoding='UTF-8'?>
+<soap:Envelope xmlns:soap='" NS-SOAP "' xmlns='urn:foo'>
   <soap:Header>
     <content-type>text/plain</content-type>
   </soap:Header>
   <soap:Body><one/></soap:Body>
 </soap:Envelope>
-")
+"))
 
 (defn is-right-soap? [it]
   (instance? SOAPMessage it)

@@ -10,10 +10,12 @@
             [clj-xpath.core :as xp]
             [saacl.xml :as xml]))
 
-(def NS-SOAP "http://schemas.xmlsoap.org/soap/envelope/")
 (def NS-ADDRESSING "http://schemas.xmlsoap.org/ws/2004/08/addressing")
 
-(def soap-factory (MessageFactory/newInstance SOAPConstants/SOAP_1_2_PROTOCOL))
+(def NS-SOAP SOAPConstants/URI_NS_SOAP_1_1_ENVELOPE )
+(def SOAP-CONTENT-TYPE SOAPConstants/SOAP_1_1_CONTENT_TYPE)
+(def soap-factory (MessageFactory/newInstance SOAPConstants/SOAP_1_1_PROTOCOL))
+
 (defn empty-soap [] (.createMessage soap-factory) )
 
 (defmethod xp/xml->doc javax.xml.transform.dom.DOMSource [thing & [opts]] (.getNode thing))
@@ -25,7 +27,7 @@
 
 (defn mime-headers []
   (let [mh (MimeHeaders.)]
-    (.addHeader mh "content-type" "application/soap+xml")
+    (.addHeader mh "content-type" SOAP-CONTENT-TYPE)
     mh))
 
 (extend-protocol XmlSoap
