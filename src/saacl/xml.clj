@@ -86,6 +86,13 @@
     (pprint [it] (println it))
     (->string [it] it)
 
+  SOAPMessage
+    (pprint [it] (pprint (->doc it)))
+    ; to string literally, don't prettify, as that corrupts XML signature
+    (->string [it]   (let [bos (java.io.ByteArrayOutputStream.)]
+                       (.writeTo it bos)
+                       (.toString bos)))
+
   Object
     (pprint [it] (pprint (->doc it)))
     (->string [it] (->string (->doc it)))
@@ -100,4 +107,3 @@
   )
 
 (defn element? [node] (instance? org.w3c.dom.Element node))
-

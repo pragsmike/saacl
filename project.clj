@@ -1,4 +1,4 @@
-(defproject saacl "0.1.1-SNAPSHOT"
+(defproject saacl "0.1.2-SNAPSHOT"
   :description "SOAP with Attachments SAAJ wrapper"
   :url "http://"
   :license {:name "Eclipse Public License"
