@@ -16,6 +16,12 @@
 </soap:Envelope>
 "))
 
+(def response-no-header (str "<?xml version='1.0' encoding='UTF-8'?>
+<soap:Envelope xmlns:soap='" NS-SOAP "' xmlns='urn:foo'>
+  <soap:Body><one/></soap:Body>
+</soap:Envelope>
+"))
+
 (defn is-right-soap? [it]
   (instance? SOAPMessage it)
   )
@@ -37,6 +43,9 @@
       (get-soap-headers (->soap response)) => {"content-type" "text/plain"}
       )
 
+(fact "get-soap-headers when no header element"
+      (get-soap-headers (->soap response-no-header)) => { }
+      )
 
 (fact "get-payload-from-soap"
       (let [body (get-payload-from-soap (->soap response) "application/xml")]

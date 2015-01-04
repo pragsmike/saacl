@@ -73,15 +73,18 @@
   "Given a SOAP XML envelope, returns a map of the SOAP header names and their text as strings.
   The keys in the map will be the string names of the child elements of the SOAP Header."
   [soap]
-
-  (into {} (map #(vector (.toLowerCase (.getLocalName %))
-                         (.getTextContent %))
-                (iterator-seq (.examineAllHeaderElements (.getSOAPHeader soap)))
-                ))
+  (if-let [hdr (.getSOAPHeader soap)]
+    (into {} (map #(vector (.toLowerCase (.getLocalName %))
+                           (.getTextContent %))
+                  (iterator-seq (.examineAllHeaderElements hdr))
+                  ))
+    {})
   )
 
 (defn get-header-elements [doc ns tagname]
-  (xp/dom-node-list->seq (.getElementsByTagNameNS (.getSOAPHeader doc) ns tagname)))
+  (if-let [hdr (.getSOAPHeader doc) ]
+    (xp/dom-node-list->seq (.getElementsByTagNameNS hdr ns tagname))
+    []))
 
 (defn get-header-element [doc ns tagname]
   (first (get-header-elements doc ns tagname)))
