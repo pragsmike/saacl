@@ -38,7 +38,7 @@
     (->source [it] (DOMSource. it))
     (->doc [it] it)
   Node
-    (->doc [it] (.getOwnerDocument it))                     ;?
+    (->doc [it] (.getOwnerDocument it))                     ; TODO only ok if Node is doc's root, FIX THIS!
   String
     (->doc [it] (binding [xp/*namespace-aware* true] (xp/xml->doc it)))
     (->source [it] (->source (ByteArrayInputStream. (.getBytes it))))
@@ -96,6 +96,10 @@
   Object
     (pprint [it] (pprint (->doc it)))
     (->string [it] (->string (->doc it)))
+  nil
+    (pprint [it] (println ""))
+    (->string [it] nil)
+
   )
 
 
