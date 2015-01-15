@@ -1,4 +1,4 @@
-(defproject saacl "0.1.4-SNAPSHOT"
+(defproject saacl "0.1.4"
   :description "SOAP with Attachments SAAJ wrapper"
   :url "https://bitbucket.org/pragsmike/saacl"
   :license {:name "Eclipse Public License"
