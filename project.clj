@@ -1,6 +1,6 @@
 (defproject saacl "0.1.4-SNAPSHOT"
   :description "SOAP with Attachments SAAJ wrapper"
-  :url "http://"
+  :url "https://bitbucket.org/pragsmike/saacl"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
@@ -14,7 +14,7 @@
                             [robert/hooke "1.3.0"]
                             [org.slf4j/slf4j-log4j12 "1.7.5"]
                             ]
-             :env          {:dev true                            }
+             :env          {:dev true  }
              :test-paths   ["test-resources"]
              :plugins      [[lein-midje "3.1.3"]
                             [cider/cider-nrepl "0.7.0"]
