@@ -22,6 +22,11 @@
 (defmethod xp/xml->doc javax.xml.soap.SOAPMessage [thing & [opts]] (.getContent (.getSOAPPart thing)))
 (defmethod xp/xml->doc javax.xml.soap.SOAPPart [thing & [opts]] (.getContent thing))
 
+;;; Tells clj-xpath how to turn a SOAPMessage (which is what response body is)
+;;; into something it can parse.
+(defmethod xp/$x javax.xml.soap.SOAPMessage [xp msg]
+   (xp/$x xp (xml/->doc msg)))
+
 (defprotocol XmlSoap
   (->soap [in]))
 

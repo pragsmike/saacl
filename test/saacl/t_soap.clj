@@ -3,7 +3,7 @@
            (org.w3c.dom Node Document))
   (:require [saacl.soap :refer :all]
             [saacl.xml :as xml]
-            [midje.sweet :refer :all]
+            [clojure.test :refer :all]
             [clojure.java.io :as io])
   )
 
@@ -26,55 +26,45 @@
   (instance? SOAPMessage it)
   )
 
-(fact "->soap"
+(deftest test->soap
 
-      (->soap response) => is-right-soap?
-      (->soap (io/input-stream (.getBytes response))) => is-right-soap?
-      (->soap (.getBytes response)) => is-right-soap?
+  (is (is-right-soap? (->soap response)))
+  (is (is-right-soap? (->soap (io/input-stream (.getBytes response)))))
+  (is (is-right-soap? (->soap (.getBytes response))))
 
 
-      (let [sm (->soap (.getBytes response))
-            hdrs (iterator-seq (.examineAllHeaderElements (.getSOAPHeader sm)))]
-        (first hdrs) => truthy
-        )
-      )
+  (let [sm (->soap (.getBytes response))
+        hdrs (iterator-seq (.examineAllHeaderElements (.getSOAPHeader sm)))]
+    (is (first hdrs))))
 
-(fact "get-soap-headers"
-      (get-soap-headers (->soap response)) => {"content-type" "text/plain"}
-      )
+(deftest test-get-soap-headers
+  (is (= {"content-type" "text/plain"} (get-soap-headers (->soap response)))))
 
-(fact "get-soap-headers when no header element"
-      (get-soap-headers (->soap response-no-header)) => { }
-      )
+(deftest test-get-soap-headers-when-no-header-element
+  (is (= { } (get-soap-headers (->soap response-no-header)))))
 
-(fact "get-payload-from-soap"
-      (let [body (get-payload-from-soap (->soap response) "application/xml")]
-        body => #(instance? Node %)
-        body => #(instance? Document %)
-        (xml/->string body) => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<one/>\n"
-        ))
+(deftest test-get-payload-from-soap
+  (let [body (get-payload-from-soap (->soap response) "application/xml")]
+    (is (instance? Node body))
+    (is (instance? Document body))
+    (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<one/>\n" (xml/->string body)))))
 
-(fact "build-soap-xml text/plain body"
-      (let [soap (build-soap-xml {:content-type "text/plain"} "Text!")]
-        soap => is-right-soap?
-        (.getTextContent (.getSOAPBody soap)) => "Text!"
-        (get-soap-headers soap) => {"content-type" "text/plain"}
-        ))
+(deftest test-build-soap-xml-text-plain-body
+  (let [soap (build-soap-xml {:content-type "text/plain"} "Text!")]
+    (is (is-right-soap? soap))
+    (is (= "Text!" (.getTextContent (.getSOAPBody soap))))
+    (is (=  {"content-type" "text/plain"} (get-soap-headers soap)))))
 
-(fact "build-soap-xml xml body"
+(deftest test-build-soap-xml-xml-body
       (let [soap (build-soap-xml {:content-type "application/xml"} (xml/->doc "<one/>"))]
-        soap => is-right-soap?
-        (get-soap-headers soap) => {"content-type" "application/xml"}
+        (is (is-right-soap? soap))
+        (is (= {"content-type" "application/xml"} (get-soap-headers soap)))
         ))
 
-(fact "set-as-payload! xml"
-      (let [soap (build-soap {:content-type "application/xml" } "<one/>")]
-        (get-payload-from-soap soap "application/xml") => (partial instance? Document)
-        )
-      )
+(deftest test-set-as-payload!-xml
+  (let [soap (build-soap {:content-type "application/xml" } "<one/>")]
+    (is (instance? Document (get-payload-from-soap soap "application/xml")))))
 
-(fact "set-as-payload! text"
-      (let [soap (build-soap {:content-type "text/plain" } "Hey!")]
-        (get-payload-from-soap soap "text/plain") => "Hey!"
-        )
-      )
+(deftest test-set-as-payload!-text
+  (let [soap (build-soap {:content-type "text/plain" } "Hey!")]
+    (= "Hey!" (get-payload-from-soap soap "text/plain"))))

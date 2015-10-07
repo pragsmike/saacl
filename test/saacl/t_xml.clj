@@ -1,7 +1,7 @@
 (ns saacl.t-xml
   (:require [saacl.xml :as xml]
             [clojure.java.io :as io]
-            [midje.sweet :refer :all]
+            [clojure.test :refer :all]
             [clj-xpath.core :as xp]
             [saacl.soap :as soap]))
 
@@ -9,21 +9,18 @@
 (def doc-node (.getDocumentElement doc))
 (def doc-bytes (.getBytes "<abc/>"))
 
-(fact "pprint"
-      (with-out-str (xml/pprint doc)) => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<abc/>\n"
-      (with-out-str (xml/pprint doc-node)) => "<?xml version=\"1.0\" encoding=\"UTF-8\"?><abc/>"
-      (with-out-str (xml/pprint doc-bytes)) => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<abc/>\n"
+(deftest test-pprint
+  (is (= (with-out-str (xml/pprint doc)) "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<abc/>\n"))
+  (is (= (with-out-str (xml/pprint doc-node))  "<?xml version=\"1.0\" encoding=\"UTF-8\"?><abc/>"))
+  (is (= (with-out-str (xml/pprint doc-bytes)) "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<abc/>\n"))
       )
 
-(fact "->string"
-      (xml/->string doc) => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<abc/>\n"
-      (xml/->string doc-node) => "<?xml version=\"1.0\" encoding=\"UTF-8\"?><abc/>"
-      (xml/->string doc-bytes) => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<abc/>\n"
-      )
+(deftest test->string
+  (is (= (xml/->string doc) "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<abc/>\n"))
+  (is (= (xml/->string doc-node)  "<?xml version=\"1.0\" encoding=\"UTF-8\"?><abc/>"))
+  (is (= (xml/->string doc-bytes) "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<abc/>\n")))
 
-(fact "->doc"
-      (xml/->doc doc) => doc
-      (xml/->doc doc-node) => doc
-      (xml/->doc doc-bytes) =not=> doc
-      )
-
+(deftest test->doc
+  (is (= doc (xml/->doc doc)))
+  (is (= doc (xml/->doc doc-node)))
+  (is (not (= doc (xml/->doc doc-bytes)))))
