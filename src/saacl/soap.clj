@@ -8,6 +8,7 @@
            (java.net URL))
   (:require [clojure.java.io :as io]
             [clj-xpath.core :as xp]
+            [clj-xpath.lib :as xpl]
             [saacl.xml :as xml]))
 
 (def NS-ADDRESSING "http://schemas.xmlsoap.org/ws/2004/08/addressing")
@@ -18,14 +19,14 @@
 
 (defn empty-soap [] (.createMessage soap-factory) )
 
-(defmethod xp/xml->doc javax.xml.transform.dom.DOMSource [thing & [opts]] (.getNode thing))
-(defmethod xp/xml->doc javax.xml.soap.SOAPMessage [thing & [opts]] (.getContent (.getSOAPPart thing)))
-(defmethod xp/xml->doc javax.xml.soap.SOAPPart [thing & [opts]] (.getContent thing))
+(defmethod xpl/xml->doc javax.xml.transform.dom.DOMSource [thing & [opts]] (.getNode thing))
+(defmethod xpl/xml->doc javax.xml.soap.SOAPMessage [thing & [opts]] (.getContent (.getSOAPPart thing)))
+(defmethod xpl/xml->doc javax.xml.soap.SOAPPart [thing & [opts]] (.getContent thing))
 
 ;;; Tells clj-xpath how to turn a SOAPMessage (which is what response body is)
 ;;; into something it can parse.
-(defmethod xp/$x javax.xml.soap.SOAPMessage [xp msg]
-   (xp/$x xp (xml/->doc msg)))
+(defmethod xpl/$x javax.xml.soap.SOAPMessage [xp msg]
+   (xpl/$x xp (xml/->doc msg)))
 
 (defprotocol XmlSoap
   (->soap [in]))
